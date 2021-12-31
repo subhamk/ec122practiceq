@@ -1,0 +1,254 @@
+---
+title: "Introduction and Descriptive Statistics"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn introductory concepts in statistical thinking, compute key summary statistics.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Introduction
+
+### Biases in Decision Making
+
+Human decision making might be affected by different kinds of cognitive biases. Therefore, a common sense approach may not always be reliable.
+
+```{r belief-bias}
+question("Belief bias in logical reasoning is the tendency:",
+         answer("to be unduly influenced by one's knowledge about the world in evaluating conclusions.", correct = TRUE, message = "Also, known as confirmation bias"),
+         answer("to view even random events as more predictable."),
+         answer("to be overly influenced by the first piece of information."),
+         answer("for memories to be heavily influenced by things that happened after the actual event itself."),
+         answer("for people to give themselves credit for successes but blame outside causes for failures."),
+         random_answer_order = TRUE,
+         incorrect = "Belief bias in logical reasoning is the tendency to be unduly influenced by one's knowledge about the world in evaluating conclusions. You can learn about common types of cognitive biases [here](https://en.wikipedia.org/wiki/List_of_cognitive_biases)."
+         )
+```
+
+**Simpson's Paradox**
+
+Suppose we want to examine the relationship between two variables $X$ and $Y$ which combines data from three groups -- Group 1, Group 2 and Group 3.
+
+```{r simp-dat}
+library(MASS)
+# library(tidyverse)
+
+set.seed(10)
+### build the g1
+mu <- c(0, 0)
+sigma <- rbind(c(2, -0.7), c(-0.7, 2))
+g1 <- as.data.frame(mvrnorm(n = 20, mu = mu, Sigma = sigma))
+g1$group <- c("Group 1")
+### build the g2
+mu <- c(3, 3)
+sigma <- rbind(c(2, -0.7), c(-0.7, 2))
+g2 <- as.data.frame(mvrnorm(n = 20, mu = mu, Sigma = sigma))
+g2$group <- c("Group 2")
+### build the g3
+mu <- c(6, 6)
+sigma <- rbind(c(3, -0.7), c(-0.7, 3))
+g3 <- as.data.frame(mvrnorm(n = 20, mu = mu, Sigma = sigma))
+g3$group <- c("Group 3")
+# the combined data of all three groups
+df <- rbind(g1, g2, g3)
+colnames(df) <- c("X", "Y", "group")
+```
+
+Figure below plots the overall relationship between $X$ and $Y$. It shows that these two variables are positively associated i.e. $Y$ tends to increase as $X$ increases.
+
+```{r simpson-plot-1, fig.cap="Ovearll relationsip between X and Y.", echo=FALSE, message = FALSE}  
+# plot data
+df %>% ggplot(aes(x = X,
+                  y = Y)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  theme_classic()
+```
+
+Now, let us examine the relationship between $X$ and $Y$ by groups. Figure below plots plots how $X$ and $Y$ are related for groups 1, 2 and 3, respectively. Notice, that the relationship is negative.
+
+```{r simpson-plot-2, fig.cap="Grou-specific relationsip between X and Y.", echo=FALSE, message = FALSE}  
+# plot data with coloured groups
+df %>% ggplot(aes(
+  x = X,
+  y = Y,
+  group = group,
+  col = group
+)) + geom_point() + 
+  geom_smooth(method = 'lm', col = 'black') +
+  theme_classic()
+
+```
+
+*Review question:*
+
+```{r simpson-q}
+question("Simpson's paradox arises when the results from individual sub-samples differ from the result that considers the overall (or merged) study.",
+         answer("True", correct = TRUE),
+         answer("False"))
+```
+
+### Describing Data: Graphical
+
+```{r cat-var}
+question("Which of the following variables is an example of a categorical variable?",
+         answer("The amount of money you spend on entertainment each month"),
+         answer("The time it takes you to write a test."),
+         answer("The weight of a laptop."),
+         answer("The geographic region of the country in which you live.", correct=TRUE),
+         random_answer_order = TRUE,
+         incorrect = "Categorical variables consist of responses that belong to groups or categories. Example: Yes/No questions, whether majoring in economics, gender, marital status etc."
+         )
+```
+
+
+```{r rank-data}
+question("What is the correct ranking of data from weakest or lowest level to strongest or highest level?",
+         answer("nominal, ordinal, interval and ratio", correct = TRUE),
+         answer("ordinal, nominal, interval and ratio"),
+         answer("interval, nominal, ratio and ordinal"),
+         answer("nominal, interval, ordinal, and ratio"),
+         answer("nominal, ordinal, ratio and interval"),
+         random_answer_order = TRUE,
+         incorrect = "Nominal and ordinal measurement refer to categorical data. Nominal: no ranking; ordinal: has rank order; Interval and ratio refer to numerical data -- difference between measurements matter. Interval scale indicates rank and distance from an arbitrary bechchmark (e.g. temperature measured in F or C); Ratio indicates both rank and distance from a natural zero."
+         )
+```
+
+
+```{r discrete-rv}
+question("Which of the following is an example of a discrete random variable?",
+         answer("The monthly electric bill for a local business."),
+         answer("The amount of time it takes to take this quiz."),
+         answer("The percentage of people renting a house in Coventry."),
+         answer("The population of Coventry.", correct = TRUE),
+         random_answer_order = TRUE,
+         incorrect = "A discrete random variable arises from a counting process and correspond to isolated points in the number line. On the other hand, a continuous random variable can take on any value within a given interval on the number line."
+         )
+```
+
+
+```{r ordinal}
+question("A measurement scale that rates product quality as either 1 = poor, 2 = average and 3 = good is known as:",
+         answer("nominal"),
+         answer("ordinal" , correct = TRUE),
+         answer("interval"),
+         answer("ratio"),
+         incorrect = "Note that product quality is ranked according to its characteristics."
+         )
+```
+
+**Histogram**
+
+```{r freq-dat message=FALSE}
+set.seed(10)
+n <- 500
+x <- rnorm(n, mean = 25, sd = 5)
+# hist(x)
+# range(x)
+
+l <- round(min(x), digits = -1) - 5
+u <- round(max(x), digits = -1)
+
+bins <-  seq(l,u,by=5)
+Scores <- cut(x, bins)
+# table(Scores)
+freq_table <- transform(table(Scores))
+rel_freq_table <- transform(freq_table, Cum_Rel_freq = cumsum(prop.table(Freq))*100)
+```
+
+The length of time it takes to complete a task differs among employees. A survey of `r 500` employees collected data on the time (in minutes) it took to complete the task. The information is presented in table \@ref(tab:freq-tab):
+
+```{r freq-tab message=FALSE}
+knitr::kable(rel_freq_table, 
+             col.names = c("Bins", "Frequency", "Cumulative(%)"),
+             caption = "Frequency distribution")
+
+# h <- hist(x, breaks = bins, main = "Histogram")
+# df <- data.frame(x)
+# head(df)
+# ggplot(df, aes(x)) + geom_histogram()
+# ggplot(df,aes(x))+geom_histogram(bins=30,breaks=c(400,420,440,460,480,500,520,540,560))
+```
+
+```{r rel-freq-q}
+question("Which of the following statements is true?",
+         answer("2.2% of all workers took exactly 15 minutues."),
+         answer("100% of all workers took longer than 35 minutes to complete the task."),
+         answer("93 workers completed the task in 20 minutes or less"),
+         answer("73 workers took 30 minutes or longer to complete the task."))
+```
+
+
+
+
+
+*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+
+Write the R code required to add two plus two:
+
+```{r two-plus-two, exercise=TRUE}
+
+```
+
+### Exercise with Code
+
+*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+
+Now write a function that adds any two numbers and then call it:
+
+```{r add-function, exercise=TRUE, exercise.lines = 5}
+add <- function() {
+  
+}
+```
+
+## Topic 2
+
+### Exercise with Hint
+
+*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+
+Modify the following code to limit the number of rows printed to 5:
+
+```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
+mtcars
+```
+
+```{r print-limit-hint}
+head(mtcars)
+```
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```
+
+<!-- refereces: -->
+<!-- simpson's paradox -->
+<!-- https://www.r-bloggers.com/2020/11/simpsons-paradox-and-misleading-statistical-inference/ -->
