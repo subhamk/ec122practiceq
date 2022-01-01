@@ -1,7 +1,12 @@
 ---
-title: "Chi-squared and F distributions"
-output: learnr::tutorial
+title: "Chi-squared, F and Bivariate probability distributions"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  Learn concepts relating to Chi-squared and F distributions and bivariate probability distributions.
 ---
 
 ```{r setup, include=FALSE}

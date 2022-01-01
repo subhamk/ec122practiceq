@@ -1,7 +1,12 @@
 ---
 title: "Probability and Probability Distribution"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  Learn concepts relating to probability and probability distributions.
 ---
 
 ```{r setup, include=FALSE}

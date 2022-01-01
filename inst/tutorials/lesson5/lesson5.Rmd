@@ -1,7 +1,12 @@
 ---
 title: "Correlation and Regression"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  Learn concepts relating to correlation and regression.
 ---
 
 ```{r setup, include=FALSE}
@@ -10,7 +15,17 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-## Topic 1
+## Concepts
+
+```{r cov-cor}
+question("Which of the following statements is true?",
+         answer("The covariance may be equal to the correlation coefficient.", correct=TRUE),
+         answer("The correlation coefficient is always greater than the covariance"),
+         answer("The covariance is always greater than the correlation coefficient."),
+         answer("Neither the covariance nor the correlation coefficient can be equal to zero."),
+         random_answer_order = TRUE,
+         incorrect = "Hint: $\rho_{X,Y} = \frac{cov(X,Y)}{\sigma_X \sigma_Y}$. They will be equal if the denominator equals 1.")
+```
 
 ### Exercise 
 

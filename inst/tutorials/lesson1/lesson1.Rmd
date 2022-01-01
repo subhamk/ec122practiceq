@@ -6,16 +6,31 @@ output:
     allow_skip: true
 runtime: shiny_prerendered
 description: >
-  Learn introductory concepts in statistical thinking, compute key summary statistics.
+  Learn introductory concepts in statistical thinking, produce graphical summary of your data, and compute key summary statistics.
 ---
 
-```{r setup, include=FALSE}
-library(learnr)
+```{r setup, include=FALSE, message=FALSE}
+library("learnr")
+library("tidyverse")
+library("kableExtra")
+library("MASS")
+library("pander")
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
 ## Introduction
+
+These practice questions are intended to check your understanding of the concepts covered in the pre-recorded lectures, live lectures, and the weekly tutorials. You should view these practice questions as complements.
+
+The exercises include **multiple choice questions (MCQ)** and **R-based exercises** 
+
+**Note:**
+
+> R based exercises are intended to deepen your understanding of the material through practical applcation. 
+> Exam/ test questions in 2021-22 will **not** ask you to write R codes.
+> To retake the exercise, click on the `Start Over` link under TOC. 
+
+> It is possible that there are errors in the exercises. If you spot any errors, please let me know.
 
 ### Biases in Decision Making
 
@@ -33,14 +48,11 @@ question("Belief bias in logical reasoning is the tendency:",
          )
 ```
 
-**Simpson's Paradox**
+## Simpson's Paradox
 
 Suppose we want to examine the relationship between two variables $X$ and $Y$ which combines data from three groups -- Group 1, Group 2 and Group 3.
 
 ```{r simp-dat}
-library(MASS)
-# library(tidyverse)
-
 set.seed(10)
 ### build the g1
 mu <- c(0, 0)
@@ -88,15 +100,16 @@ df %>% ggplot(aes(
 
 ```
 
-*Review question:*
+### Review question:
 
 ```{r simpson-q}
 question("Simpson's paradox arises when the results from individual sub-samples differ from the result that considers the overall (or merged) study.",
          answer("True", correct = TRUE),
-         answer("False"))
+         answer("False"),
+         random_answer_order = TRUE)
 ```
 
-### Describing Data: Graphical
+## Describing Data: Graphical
 
 ```{r cat-var}
 question("Which of the following variables is an example of a categorical variable?",
@@ -106,6 +119,18 @@ question("Which of the following variables is an example of a categorical variab
          answer("The geographic region of the country in which you live.", correct=TRUE),
          random_answer_order = TRUE,
          incorrect = "Categorical variables consist of responses that belong to groups or categories. Example: Yes/No questions, whether majoring in economics, gender, marital status etc."
+         )
+```
+
+
+```{r numeric-var}
+question("Which of the following is most likely a continuous numerical variable?",
+         answer("The population size of Coventry"),
+         answer("The number of people that have been vaccinated in the UK"),
+         answer("The number of miles of interstate highways", correct = TRUE),
+         answer("The number of books on a bookshelf."),
+         random_answer_order = TRUE,
+         incorrect = "A continuous numerical vaiable can take any value within a given interval on the number line."
          )
 ```
 
@@ -141,13 +166,14 @@ question("A measurement scale that rates product quality as either 1 = poor, 2 =
          answer("ordinal" , correct = TRUE),
          answer("interval"),
          answer("ratio"),
+         random_answer_order = TRUE,
          incorrect = "Note that product quality is ranked according to its characteristics."
          )
 ```
 
-**Histogram**
+### Frequency distribution
 
-```{r freq-dat message=FALSE}
+```{r freq-dat}
 set.seed(10)
 n <- 500
 x <- rnorm(n, mean = 25, sd = 5)
@@ -164,91 +190,422 @@ freq_table <- transform(table(Scores))
 rel_freq_table <- transform(freq_table, Cum_Rel_freq = cumsum(prop.table(Freq))*100)
 ```
 
-The length of time it takes to complete a task differs among employees. A survey of `r 500` employees collected data on the time (in minutes) it took to complete the task. The information is presented in table \@ref(tab:freq-tab):
+The length of time it takes to complete a task differs among employees. A survey of `r 500` employees collected data on the time (in minutes) it took to complete the task. The information is presented in the frequency table below:
 
-```{r freq-tab message=FALSE}
-knitr::kable(rel_freq_table, 
+```{r freqtab}
+knitr::kable(rel_freq_table,
              col.names = c("Bins", "Frequency", "Cumulative(%)"),
-             caption = "Frequency distribution")
-
-# h <- hist(x, breaks = bins, main = "Histogram")
-# df <- data.frame(x)
-# head(df)
-# ggplot(df, aes(x)) + geom_histogram()
-# ggplot(df,aes(x))+geom_histogram(bins=30,breaks=c(400,420,440,460,480,500,520,540,560))
+             caption = "Frequency distribution") %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
 ```{r rel-freq-q}
 question("Which of the following statements is true?",
          answer("2.2% of all workers took exactly 15 minutues."),
          answer("100% of all workers took longer than 35 minutes to complete the task."),
-         answer("93 workers completed the task in 20 minutes or less"),
-         answer("73 workers took 30 minutes or longer to complete the task."))
+         answer("93 workers completed the task in 20 minutes or less", correct = TRUE),
+         answer("73 workers took 30 minutes or longer to complete the task."),
+         random_answer_order = TRUE)
 ```
 
+Consider the frequency distribution in the table below and answer the questions that follow.
 
+```{r freq-dat1}
+set.seed(10)
+n <- 20
+x <- rnorm(n, mean = 25, sd = 5)
+h <- hist(x, plot = FALSE)
+htab <- data.frame(h$mids, h$counts)
+htab$cf <- (cumsum(htab$h.counts)/sum(htab$h.counts))*100
 
+r <- htab[5,3]
+x1 <- htab[1,3]
+x2 <- htab[8,3]
+x3 <- htab[7,3]
+htab[5,3] <- "**"
 
+p <- htab[4,1]
+r1 <- as.numeric(htab[4,3])
+r2 <- as.numeric(htab[3,3])
+r3 <- as.numeric(htab[6,3])
+r4 <- as.numeric(htab[7,3])
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
-
-Write the R code required to add two plus two:
-
-```{r two-plus-two, exercise=TRUE}
-
+knitr::kable(htab,
+             col.names = c("Mids", "Frequency", "Cumulative(%)"),
+             caption = "Frequency distribution",
+             align = "ccc") %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
-### Exercise with Code
-
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
-
-Now write a function that adds any two numbers and then call it:
-
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
+```{r rel-freq-q1}
+quiz(caption = "Based on the above table,",
+question(sprintf("What proprtion of these values are less than %s", p),
+         answer(sprintf("%s", r1/100), correct = TRUE),
+         answer(sprintf("%s", r2/100)),
+         answer(sprintf("%s", r3/100)),
+         answer(sprintf("%s", r4/100)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Its the value in col(3) divided by 100."
+         ),
+question("What is the missing cumulative % value identified by '**' in the table?",
+         answer(sprintf("%s", x1)),
+         answer(sprintf("%s", r), correct = TRUE),
+         answer(sprintf("%s", x2)),
+         answer(sprintf("%s", x3)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Find the total of column (2) i.e. the sample size. Next, find the cumulative frequency up to the row with the missing frequency in the table. Divide the cumulative sum by the sample size and multiply the ratio by 100 to get the required value in percentage."
+         )
+)
 ```
 
-## Topic 2
+Now, consider another frequency distribution table.
 
-### Exercise with Hint
+```{r freq-dat2}
+set.seed(10)
+n <- 15
+x <- rnorm(n, mean = 15, sd = 5)
+h <- hist(x, plot = FALSE)
+htab <- data.frame(h$mids, h$counts)
+htab$cf <- (cumsum(htab$h.counts)/sum(htab$h.counts))*100
+r <- htab[4,2]
+htab[4,2] <- "**"
 
-*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+x1 <- n - 5
+x2 <- n + 5
+x3 <- n * 5
 
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
+knitr::kable(htab,
+             col.names = c("Mids", "Frequency", "Cumulative(%)"),
+             caption = "Frequency distribution",
+             align = "ccc",
+             digits = c(0,0,1)) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
-```{r print-limit-hint}
+```{r rel-freq-q3}
+question("What is the missing frequency value identified by '**' in the table?",
+         answer(sprintf("%s", x1)),
+         answer(sprintf("%s", r), correct = TRUE),
+         answer(sprintf("%s", x2)),
+         answer(sprintf("%s", x3)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Let the missing frequency be $x$. Sum of column (2) + $x$ gives the sample size. For row 1, relative frequency = cumulative frequency. Construct an equation and solve for $x$."
+         )
+```
+
+### Frequency distribution in R
+
+*Here's a simple exercise to plot histograms in R*
+
+Let us learn how to construct frequency distributions and cumulative frequency distributions (CDF) using the R statistical software.
+
+Base R loads some datasets by default. We are going to explore some of them. To execure the codes, you can simply hit the 'Run code' button on the top-right of the code chunks.
+
+**Plotting frequency distributions**
+
+### Plotting Hisograms 
+
+We will use the `mtcars` dataset to create frequency distribution plots. Let's have a quick look at the variables in the dataset.
+
+The function `head()` plots the first five observations by default.
+
+```{r mtcars1, exercise=TRUE}
 head(mtcars)
 ```
 
-### Quiz
+To change the number of observations to view, we can supply R with the number of rows that we want to view.
 
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+```{r mtcars2, exercise=TRUE}
+head(mtcars, n = 10)
+```
 
-Some questions to verify that you understand the purposes of various base and recommended R packages:
+In the same way, we can look at the *last* $n$ observations of the data using the function `tail()`. Try it out.
 
-```{r quiz}
+```{r mtcars3, exercise=TRUE}
+
+```
+
+```{r mtcars3-solution}
+tail(mtcars)
+```
+
+Now that we are a bit familiar with the dataset, let's plot the distribution of the variable `mpg` (miles per US gallon).
+
+```{r mtcars-hist-mpg, exercise=TRUE}
+hist(mtcars$mpg)
+```
+
+We can change the plot title and the axis labels to something easier for the readers to understand.
+
+```{r mtcars-hist-mpg1, exercise=TRUE}
+hist(mtcars$mpg,
+     main = "Histogram of Car Mileage (in miles per gallon)",
+     xlab = "Mileage (in miles per gallon)")
+```
+
+Suppose, we are also interested in the weight of the cars (`wt` in the dataset). Plot a histogram of `wt`.
+
+```{r mtcars-hist-wt, exercise=TRUE}
+
+```
+
+```{r mtcars-hist-wt-solution}
+hist(mtcars$wt,
+     main = "Histogram of Weight (1000 lbs)",
+     xlab = "Weight (1000 lbs)")
+```
+
+### Plotting CDFs
+
+We might be interested in the empirical CDF (ECDF) of a variable i.e. its cumulative distribution function. You can run the code below to plot ECDF of the variable `mpg`.
+
+```{r ecdf1, exercise=TRUE}
+plot(ecdf(mtcars$mpg), 
+     xlab = 'Sample Quantiles of Mileage', 
+     ylab = '', 
+     main = 'Empirical Cumulative Distribution'
+     )
+```
+
+As an exercise, plot the ECDF of `wt` i.e. the weight of cars.
+
+```{r ecdf2, exercise=TRUE}
+
+```
+
+```{r ecdf2-solution}
+plot(ecdf(mtcars$wt), 
+     xlab = 'Sample Quantiles of Weight', 
+     ylab = '', 
+     main = 'Empirical Cumulative Distribution'
+     )
+```
+
+## Describing Data: Numerical
+
+```{r outliers}
+question("Which of the following descriptive statistics is least affected by outliers?",
+         answer("median", correct=TRUE),
+         answer("mean"),
+         answer("range"),
+         answer("standard deviation"),
+         random_answer_order = TRUE)
+```
+
+```{r cv1}
+question("If you are interested in comparing variation in turnover for small and large corporations selling similar goods, which of the following is the most appropriate measure of dispersion?",
+         answer("the coefficient of variation", correct=TRUE),
+         answer("the interquartile range"),
+         answer("the standard deviation"),
+         answer("the range"),
+         random_answer_order = TRUE,
+         incorrect = "$CV = \\frac{\\sigma}{\\mu}$. Also known as relative SD as it is computed as SD relative to the mean.")
+```
+
+### Exercise 1
+
+For the following data:
+
+```{r sumstat1}
+set.seed(10)
+
+n <-11
+x <- sample(-10:20, n)
+x.sort <- sort.int(x)
+
+mu <- mean(x)
+med <- median(x)
+
+# position of median
+pos.med <- match(med, x.sort)
+pos.dum <- sample(1:n, n)
+pos.dum <- pos.dum[-pos.med]
+  
+r <- range(x)
+r1 <- r[2] - r[1]
+
+# mid-point of sorted values for the lower half
+q1 <- median(x[x<med])
+# mid-point of sorted values for the upper half
+q3 <- median(x[x>med])
+# iqr
+iqr <- q3 - q1
+
+# variance
+v <- var(x)
+
+pander(x)
+```
+
+
+```{r sumstat1-q}
 quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
+  caption = "",
+  question(
+    "The sample mean is:",
+    answer(sprintf("%s", round(mu, 2)), correct = TRUE),
+    answer(sprintf("%s", round(mu, 2) * 0.5)),
+    answer(sprintf("%s", round(mu, 2) * -0.6)),
+    answer(sprintf("%s", round(mu, 2) + 2.1)),
+    random_answer_order = TRUE,
+    incorrect = "Hint: Mean = $\\frac{\\sum x_i}{n}$"
   ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
+  question(
+    "The sample median:",
+    answer(sprintf("%s", med), correct = TRUE),
+    answer(sprintf("%s", x.sort[1])),
+    answer(sprintf("%s", x.sort[2])),
+    answer(sprintf("%s", x.sort[8])),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $n$ is odd. Pick middle-most observation after sorting data."
+  ),
+  question(
+    "The first quartile ($Q_1$) is:",
+    answer(sprintf("%s", q1), correct = TRUE),
+    answer(sprintf("%s", x.sort[1])),
+    answer(sprintf("%s", x.sort[2])),
+    answer(sprintf("%s", x.sort[7])),
+    random_answer_order = TRUE
+  ),
+  question(
+    "The inter-quartile range (IQR) is:",
+    answer(sprintf("%s", round(iqr,0)), correct = TRUE),
+    answer(sprintf("%s", round(iqr*.5,0))),
+    answer(sprintf("%s", round(iqr*sqrt(iqr/2),0))),
+    answer(sprintf("%s", round(iqr*1.2,0))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $IQR = Q_3 - Q_1$."
+  ),
+  question(
+    "The sample variance ($s^2_x$) is:",
+    answer(sprintf("%s", round(v, 2)), correct = TRUE),
+    answer(sprintf("%s", round(v*0.5 , 2))),
+    answer(sprintf("%s", round(v*sqrt(v/2),2))),
+    answer(sprintf("%s", round(1/v, 2))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $\\text{Sample variance } (s_{x}^2) = \\frac{1}{n-1}\\sum_{i=1}^{n}(x_i -\\bar{x})^2$."
+  )  
+)
+```
+
+### Exercise 2
+
+For the following data:
+
+```{r sumstat2}
+set.seed(15)
+
+n <- 9
+x <- sample(-2:50, n)
+x.sort <- sort.int(x)
+
+mu <- mean(x)
+med <- median(x)
+
+# position of median
+pos.med <- match(med, x.sort)
+pos.dum <- sample(1:n, n)
+pos.dum <- pos.dum[-pos.med]
+  
+r <- range(x)
+r1 <- r[2] - r[1]
+
+# mid-point of sorted values for the lower half
+q1 <- median(x[x<med])
+# mid-point of sorted values for the upper half
+q3 <- median(x[x>med])
+# iqr
+iqr <- q3 - q1
+
+# variance
+v <- var(x)
+
+# standard deviation
+s <- sd(x)
+
+# skewness
+skew <- (1/(length(x)*sd(x)^3))*(sum(x^3)-3*((length(x)-1)*mean(x)*var(x))-length(x)*mean(x)^3)
+
+# skewness for a normal distribution is zero.
+if (skew > 0) {
+  str_skew <- "positive"
+} else if (skew < 0) {
+  str_skew <- "negative"
+} else if (skew == 0) {
+  str_skew <- "zero"
+}
+
+pander(x)
+```
+
+
+```{r sumstat2-q}
+quiz(
+  caption = "",
+  question(
+    "The sample mean is:",
+    answer(sprintf("%s", round(mu, 2)), correct = TRUE),
+    answer(sprintf("%s", round(mu, 2) * 0.4)),
+    answer(sprintf("%s", round(mu, 2) * -0.3)),
+    answer(sprintf("%s", round(mu, 2) + 1.1)),
+    random_answer_order = TRUE,
+    incorrect = "Hint: Mean = $\\frac{\\sum x_i}{n}$"
+  ),
+  question(
+    "The sample median:",
+    answer(sprintf("%s", med), correct = TRUE),
+    answer(sprintf("%s", x.sort[1])),
+    answer(sprintf("%s", x.sort[pos.med-1])),
+    answer(sprintf("%s", x.sort[n])),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $n$ is odd. Pick middle-most observation after sorting data."
+  ),
+  question(
+    "The first quartile ($Q_1$) is:",
+    answer(sprintf("%s", q1), correct = TRUE),
+    answer(sprintf("%s", x.sort[1])),
+    answer(sprintf("%s", x.sort[n-1])),
+    answer(sprintf("%s", x.sort[n])),
+    random_answer_order = TRUE
+  ),
+  question(
+    "The inter-quartile range (IQR) is:",
+    answer(sprintf("%s", round(iqr,0)), correct = TRUE),
+    answer(sprintf("%s", round(iqr*.6,0))),
+    answer(sprintf("%s", round(iqr*sqrt(iqr/2),0))),
+    answer(sprintf("%s", round(iqr*1.1,0))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $IQR = Q_3 - Q_1$."
+  ),
+  question(
+    "The sample variance ($s^2_x$) is:",
+    answer(sprintf("%s", round(v, 2)), correct = TRUE),
+    answer(sprintf("%s", round(v*0.5 , 2))),
+    answer(sprintf("%s", round(v*sqrt(v/2),2))),
+    answer(sprintf("%s", round(v * v^(.3), 2))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $\\text{Sample variance } (s_{x}^2) = \\frac{1}{n-1}\\sum_{i=1}^{n}(x_i -\\bar{x})^2$."
+  ),
+  question(
+    "The sample standard deviation is ($s_x$) is:",
+    answer(sprintf("%s", round(s, 2)), correct = TRUE),
+    answer(sprintf("%s", round(s^2 , 2))),
+    answer(sprintf("%s", round(s*sqrt(s/2),2))),
+    answer(sprintf("%s", round(1/s, 2))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $\\text{Sample standard deviation } (s_{x}) = \\sqrt{s^2_x}$."
+  ),
+  question(
+    "The sample skewness is:",
+    answer(sprintf("%s", round(skew, 2)), correct = TRUE),
+    answer(sprintf("%s", round(skew^2 , 2))),
+    answer(sprintf("%s", round(skew*-0.2,2))),
+    answer(sprintf("%s", round(1/skew, 2))),
+    random_answer_order = TRUE,
+    incorrect = "Hint: $\\text{Skewness } = \\frac{1}{n}\\frac{\\left(\\sum_{i=1}^{n} x_i^3-3(n-1)\\bar{x} s_{x}^2-n\\bar{x}^3\\right)}{s_{x}^3}$."
   )
 )
 ```
 
-<!-- refereces: -->
-<!-- simpson's paradox -->
-<!-- https://www.r-bloggers.com/2020/11/simpsons-paradox-and-misleading-statistical-inference/ -->
+### Exercise 3
+

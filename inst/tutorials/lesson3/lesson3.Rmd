@@ -1,7 +1,12 @@
 ---
 title: "Estimation and Hypothesis Testing"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  Learn concepts relating to sampling, estimation and hypothesis testing.
 ---
 
 ```{r setup, include=FALSE}
@@ -10,7 +15,16 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-## Topic 1
+## Sampling
+
+```{r srs}
+question("A researcher used a procedure to select a sample of $n$ objects from a population in such a way that each member of the population is chosen strictly by chance, is equally likely to be chosen, and every possible sample of size $n$ has the same chance of selection. The procedure used by the researcher is known as:",
+         answer("descriptive statistics"),
+         answer("inferential statistics"),
+         answer("simple random sampling", correct = TRUE),
+         answer("None of the above"))
+```
+
 
 ### Exercise 
 
