@@ -303,8 +303,6 @@ Base R loads some datasets by default. We are going to explore some of them. To 
 
 **Plotting frequency distributions**
 
-### Plotting Hisograms 
-
 We will use the `mtcars` dataset to create frequency distribution plots. Let's have a quick look at the variables in the dataset.
 
 The function `head()` plots the first five observations by default.
@@ -609,3 +607,41 @@ quiz(
 
 ### Exercise 3
 
+*Here we will learn how to generate summary statistics in R*
+
+We will use the `mtcars` dataset as before to explore the concepts. 
+
+First, let us look at the average of `mpg`.
+
+```{r exsum1, exercise = TRUE}
+# we create a variable mpg with the relevant data
+mpg <- mtcars$mpg
+
+# mean
+mean(mpg)
+```
+
+Next, we would like to know about the dispersion of `mpg`.
+
+```{r exsum2, exercise = TRUE}
+# variance
+var(mpg)
+
+# SD
+sd(mpg)
+```
+
+What about the minimum and the maximum values that `mpg` takes?
+
+```{r exsum3, exercise = TRUE}
+range(mpg)
+```   
+
+**Note**
+> R uses a slightly different formula to compute quartiles and skewness. For the pupose of this course you should **only** use the formula provided in the lecture slides. 
+
+To get an overview of the distribution of `mpg`
+
+```{r exsum4, exercise = TRUE}
+summary(mpg)
+```
