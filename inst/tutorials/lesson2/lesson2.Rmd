@@ -1,5 +1,5 @@
 ---
-title: "Probability and Probability Distribution"
+title: "Probability and Probability Distributions"
 output: 
   learnr::tutorial:
     progressive: true
