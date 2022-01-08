@@ -30,7 +30,9 @@ The exercises include **multiple choice questions (MCQ)** and **R-based exercise
 > Exam/ test questions in 2021-22 will **not** ask you to write R codes.
 > To retake the exercise, click on the `Start Over` link under TOC. 
 
-> It is possible that there are errors in the exercises. If you spot any errors, please let me know.
+> This is in beta version. If you spot any errors or have any feedback, please do share them with me.
+
+Let's begin!
 
 ### Biases in Decision Making
 
@@ -379,6 +381,20 @@ plot(ecdf(mtcars$wt),
      )
 ```
 
+To understand the relationship between `mpg` and `wt`, we can use a scatter plot.
+
+```{r mtcars-scatter, exercise = TRUE}
+mpg <- mtcars$mpg
+wt <- mtcars$wt
+
+plot(wt, mpg,
+     xlab = "Weight (1000 lbs)",
+     ylab = "Mileage (in miles per gallon)",
+     main = "Scatter Plot of Weight and Mileage")
+```
+
+The plot shows an *inverse* relationship between a car's weight and its mileage.
+
 ## Describing Data: Numerical
 
 ```{r outliers}
@@ -645,3 +661,38 @@ To get an overview of the distribution of `mpg`
 ```{r exsum4, exercise = TRUE}
 summary(mpg)
 ```
+
+### Exercise 4
+
+*Here we will look at qualitative data*.
+
+The `iris` dataset contains information on the length and width of sepals and petals of three species of Iris -- setosa, bersicolor and virginica.
+
+We might be interested in the frequency distribution of the species. We use the `table` function for this.
+
+```{r iris1, exercise = TRUE}
+species <- iris$Species           # create variable
+species.freq <- table(species)    # frequency distribution
+cbind(freq)                       # get data in column format
+```
+
+To get the relative frequency, we use the `prop.table` function.
+
+```{r iris2, exercise = TRUE}
+species.prop <- prop.table(species.freq)  # table of proportions
+cbind(species.prop)                       # display in table format
+round(cbind(species.prop), 2)             # to round-up to 2 d.p.
+```
+
+To plot the distribution we use the `barplot` function.
+
+```{r iris3, exercise = TRUE}
+barplot(species.freq)             # barplot of the frequency of species
+```
+
+To plot a pie chart, we use the `pie` function.
+
+```{r iris4, exercise = TRUE}
+pie(species.freq)
+```
+
