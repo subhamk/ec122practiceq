@@ -629,7 +629,7 @@ We will use the `mtcars` dataset as before to explore the concepts.
 
 First, let us look at the average of `mpg`.
 
-```{r exsum1, exercise = TRUE}
+```{r prepare-exsum1, exercise = TRUE}
 # we create a variable mpg with the relevant data
 mpg <- mtcars$mpg
 
@@ -639,7 +639,7 @@ mean(mpg)
 
 Next, we would like to know about the dispersion of `mpg`.
 
-```{r exsum2, exercise = TRUE}
+```{r exsum2, exercise = TRUE, exercise.setup="prepare-exsum1"}
 # variance
 var(mpg)
 
@@ -649,7 +649,7 @@ sd(mpg)
 
 What about the minimum and the maximum values that `mpg` takes?
 
-```{r exsum3, exercise = TRUE}
+```{r exsum3, exercise = TRUE, exercise.setup="prepare-exsum1"}
 range(mpg)
 ```   
 
@@ -658,7 +658,7 @@ range(mpg)
 
 To get an overview of the distribution of `mpg`
 
-```{r exsum4, exercise = TRUE}
+```{r exsum4, exercise = TRUE, exercise.setup="prepare-exsum1"}
 summary(mpg)
 ```
 
@@ -670,15 +670,15 @@ The `iris` dataset contains information on the length and width of sepals and pe
 
 We might be interested in the frequency distribution of the species. We use the `table` function for this.
 
-```{r iris1, exercise = TRUE}
+```{r prepare-iris1, exercise = TRUE}
 species <- iris$Species           # create variable
 species.freq <- table(species)    # frequency distribution
-cbind(freq)                       # get data in column format
+cbind(species.freq)               # get data in column format
 ```
 
 To get the relative frequency, we use the `prop.table` function.
 
-```{r iris2, exercise = TRUE}
+```{r iris2, exercise = TRUE, exercise.setup="prepare-iris1"}
 species.prop <- prop.table(species.freq)  # table of proportions
 cbind(species.prop)                       # display in table format
 round(cbind(species.prop), 2)             # to round-up to 2 d.p.
@@ -686,13 +686,13 @@ round(cbind(species.prop), 2)             # to round-up to 2 d.p.
 
 To plot the distribution we use the `barplot` function.
 
-```{r iris3, exercise = TRUE}
+```{r iris3, exercise = TRUE, exercise.setup="prepare-iris1"}
 barplot(species.freq)             # barplot of the frequency of species
 ```
 
 To plot a pie chart, we use the `pie` function.
 
-```{r iris4, exercise = TRUE}
+```{r iris4, exercise = TRUE, exercise.setup="prepare-iris1"}
 pie(species.freq)
 ```
 
