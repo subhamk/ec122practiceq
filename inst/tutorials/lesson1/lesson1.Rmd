@@ -621,7 +621,7 @@ quiz(
 )
 ```
 
-### Z scores
+## Z scores
 
 Consider the following data and answer the questions that follow:
 
@@ -680,7 +680,7 @@ quiz(caption = "Standardized values",
 ```
 
 
-### Weighted average
+## Weighted average
 
 The following table contains information on a stock portfolio. The first column is the price paid for the share while the second column in the number of shares purchased at that price.
 
@@ -760,7 +760,7 @@ question("What is the weighted average returns of the portfolio?",
 )
 ```
 
-### Exercise in R: Quantitative Data
+## R exercise: Summarizing Quantitative Data
 
 *Here we will learn how to generate summary statistics in R*
 
@@ -768,28 +768,25 @@ We will use the `mtcars` dataset as before to explore the concepts.
 
 First, let us look at the average of `mpg`.
 
-```{r prepare-exsum1, exercise = TRUE}
-# we create a variable mpg with the relevant data
-mpg <- mtcars$mpg
-
+```{r exsum1, exercise = TRUE}
 # mean
-mean(mpg)
+mean(mtcars$mpg)
 ```
 
 Next, we would like to know about the dispersion of `mpg`.
 
-```{r exsum2, exercise = TRUE, exercise.setup="prepare-exsum1"}
+```{r exsum2, exercise = TRUE}
 # variance
-var(mpg)
+var(mtcars$mpg)
 
 # SD
-sd(mpg)
+sd(mtcars$mpg)
 ```
 
 What about the minimum and the maximum values that `mpg` takes?
 
-```{r exsum3, exercise = TRUE, exercise.setup="prepare-exsum1"}
-range(mpg)
+```{r exsum3, exercise = TRUE}
+range(mtcars$mpg)
 ```   
 
 **Note**
@@ -797,11 +794,11 @@ range(mpg)
 
 To get an overview of the distribution of `mpg`
 
-```{r exsum4, exercise = TRUE, exercise.setup="prepare-exsum1"}
-summary(mpg)
+```{r exsum4, exercise = TRUE}
+summary(mtcars$mpg)
 ```
 
-### Exercise in R: Qualitative Data
+## R exercise: Summarizing Qualitative Data
 
 *Here we will look at qualitative data*.
 
@@ -809,7 +806,13 @@ The `iris` dataset contains information on the length and width of sepals and pe
 
 We might be interested in the frequency distribution of the species. We use the `table` function for this.
 
-```{r prepare-iris1, exercise = TRUE}
+```{r prepare-iris}
+species <- iris$Species           # create variable
+species.freq <- table(species)    # frequency distribution
+cbind(species.freq)               # get data in column format
+```
+
+```{r iris1, exercise = TRUE}
 species <- iris$Species           # create variable
 species.freq <- table(species)    # frequency distribution
 cbind(species.freq)               # get data in column format
@@ -817,7 +820,7 @@ cbind(species.freq)               # get data in column format
 
 To get the relative frequency, we use the `prop.table` function.
 
-```{r iris2, exercise = TRUE, exercise.setup="prepare-iris1"}
+```{r iris2, exercise = TRUE, exercise.setup="prepare-iris"}
 species.prop <- prop.table(species.freq)  # table of proportions
 cbind(species.prop)                       # display in table format
 round(cbind(species.prop), 2)             # to round-up to 2 d.p.
@@ -825,13 +828,13 @@ round(cbind(species.prop), 2)             # to round-up to 2 d.p.
 
 To plot the distribution we use the `barplot` function.
 
-```{r iris3, exercise = TRUE, exercise.setup="prepare-iris1"}
+```{r iris3, exercise = TRUE, exercise.setup="prepare-iris"}
 barplot(species.freq)             # barplot of the frequency of species
 ```
 
 To plot a pie chart, we use the `pie` function.
 
-```{r iris4, exercise = TRUE, exercise.setup="prepare-iris1"}
+```{r iris4, exercise = TRUE, exercise.setup="prepare-iris"}
 pie(species.freq)
 ```
 
