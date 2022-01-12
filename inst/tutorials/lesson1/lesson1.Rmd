@@ -22,15 +22,15 @@ knitr::opts_chunk$set(echo = FALSE)
 
 These practice questions are intended to check your understanding of the concepts covered in the pre-recorded lectures, live lectures, and the weekly tutorials. You should view these practice questions as complements.
 
-The exercises include **multiple choice questions (MCQ)** and **R-based exercises** 
+Exercises include a mix of **multiple choice questions (MCQ)** and **R-based questions**. The R-based questions will only cover select topics to keep the focus on *why* and to understand the assumptions and the steps involved.
 
 **Note:**
 
-> R based exercises are intended to deepen your understanding of the material through practical applcation. 
-> Exam/ test questions in 2021-22 will **not** ask you to write R codes.
-> To retake the exercise, click on the `Start Over` link under TOC. 
-
-> This is in beta version. If you spot any errors or have any feedback, please do share them with me.
+> - R based exercises are intended to deepen your understanding of the material through practical application. 
+> - Exam/ test questions in 2021-22 will **not** ask you to write R codes.
+> - To retake any exercise, click on the `Start Over` link under TOC. 
+> - Your progress is not saved. User sessions automatically time-out after 10 minutes of inactivity.
+> - This is a beta version. If you spot any errors or have any feedback, please do share them with me.
 
 Let's begin!
 
@@ -192,7 +192,7 @@ freq_table <- transform(table(Scores))
 rel_freq_table <- transform(freq_table, Cum_Rel_freq = cumsum(prop.table(Freq))*100)
 ```
 
-The length of time it takes to complete a task differs among employees. A survey of `r 500` employees collected data on the time (in minutes) it took to complete the task. The information is presented in the frequency table below:
+The length of time it takes to complete a task differs among employees. A survey of `r n` employees collected data on the time (in minutes) it took to complete the task. The information is presented in the frequency table below:
 
 ```{r freqtab}
 knitr::kable(rel_freq_table,
@@ -621,7 +621,146 @@ quiz(
 )
 ```
 
-### Exercise 3
+### Z scores
+
+Consider the following data and answer the questions that follow:
+
+```{r z-score-dat}
+set.seed(10)
+
+n <-5
+x <- sample(5:50, n)
+cen.x <- x - mean(x)
+z.x <- cen.x/sd(x)
+
+df <- data.frame(x, round(cen.x,2), round(z.x,2))
+
+df1 <- df
+r <- df[1,3]
+r1 <- df[2,3]
+df1[1,3] <- "*[1]"
+df1[2,3] <- "*[2]"
+
+x1 <- r - 0.5
+x2 <- r + 0.5
+x3 <- r * 1.2
+
+x11 <- r1 - 0.5
+x21 <- r1 + 0.3
+x31 <- r1 * 0.8
+
+knitr::kable(df1,
+             col.names = c("X", "Centered", "z score"),
+             caption = "Standardized values",
+             align = "ccc",
+             digits = c(0,2,2)) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+```{r z-score-q}
+quiz(caption = "Standardized values",
+     question("What is the missing z-score value identified by '*[1]' in the table?",
+         answer(sprintf("%s", x1)),
+         answer(sprintf("%s", r), correct = TRUE),
+         answer(sprintf("%s", x2)),
+         answer(sprintf("%s", x3)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Let the missing frequency be $x$. Compute z-score as $\\frac{x - \\bar{x}}{s_x}$ where $\\bar{x}$ is the sample mean and $s_x$ is the sample standard deviation."
+         ),
+     question("What is the missing z-score value identified by '*[2]' in the table?",
+         answer(sprintf("%s", x11)),
+         answer(sprintf("%s", r1), correct = TRUE),
+         answer(sprintf("%s", x21)),
+         answer(sprintf("%s", x31)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Let the missing frequency be $x$. Compute z-score as $\\frac{x - \\bar{x}}{s_x}$ where $\\bar{x}$ is the sample mean and $s_x$ is the sample standard deviation."
+         )
+)
+```
+
+
+### Weighted average
+
+The following table contains information on a stock portfolio. The first column is the price paid for the share while the second column in the number of shares purchased at that price.
+
+```{r wt-avg-dat}
+set.seed(10)
+
+n <- 3
+x <- sample(100:200, n)  # share price
+wt <- sample(20:50, n)   # number of shares
+df <- data.frame(x, wt)
+
+sum.wt <- sum(wt)
+wt.sum <- sum(x * wt)
+wt.avg <- round(wt.sum/sum.wt,2)
+
+# fuzz
+x1 <- round(wt.avg * 0.5, 2)
+x2 <- round(wt.avg * 1.5, 2)
+x3 <- wt.sum
+
+knitr::kable(df,
+             col.names = c("Price per share ($p_i$)", "Number of shares($w_i$)"),
+             caption = "Stock Portfolio",
+             align = "cc",
+             digits = c(0,0)) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+```{r wt-avg1}
+question("What is the weighted average share price in the portfolio?",
+         answer(sprintf("%s", x1)),
+         answer(sprintf("%s", wt.avg), correct = TRUE),
+         answer(sprintf("%s", x2)),
+         answer(sprintf("%s", x3)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Compute the weighted sum $\\sum w_i p_i$. Divide this by sum of weights $\\sum w_i$."
+)
+```
+
+
+Now, for a different portfolio, let's look at the stock returns:
+
+```{r wt-avg-dat1}
+set.seed(10)
+
+n <- 3
+x <- sample(-5:10, n)    # returns per share
+wt <- sample(20:50, n)   # number of shares
+df <- data.frame(x, wt)
+
+sum.wt <- sum(wt)
+wt.sum <- sum(x * wt)
+wt.avg <- round(wt.sum/sum.wt,2)
+
+# fuzz
+x1 <- round(wt.avg * 0.6,2)
+x2 <- round(wt.avg * 1.2,2)
+x3 <- round(wt.sum/(sum.wt+50),2)
+
+knitr::kable(df,
+             col.names = c("Returns per share ($r_i$%)", "Number of shares($w_i$)"),
+             caption = "Return on Stock Portfolio",
+             align = "cc",
+             digits = c(0,0)) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+```{r wt-avg2}
+question("What is the weighted average returns of the portfolio?",
+         answer(sprintf("%s", x1)),
+         answer(sprintf("%s", wt.avg), correct = TRUE),
+         answer(sprintf("%s", x2)),
+         answer(sprintf("%s", x3)),
+         random_answer_order = TRUE,
+         incorrect = "Hint: Compute the weighted sum $\\sum w_i r_i$. Divide this by sum of weights $\\sum r_i$."
+)
+```
+
+### Exercise in R: Quantitative Data
 
 *Here we will learn how to generate summary statistics in R*
 
@@ -662,7 +801,7 @@ To get an overview of the distribution of `mpg`
 summary(mpg)
 ```
 
-### Exercise 4
+### Exercise in R: Qualitative Data
 
 *Here we will look at qualitative data*.
 

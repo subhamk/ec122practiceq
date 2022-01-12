@@ -10,65 +10,102 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-## Topic 1
+## Downloading and Installing R/RStudio
 
-### Exercise 
+**R**
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+You can download and install R from [here](https://cran.r-project.org/).
 
-Write the R code required to add two plus two:
+**RStudio**
+
+RStudio is an application to work with R. It provides an interface to work with R. It is recommended that you install RStudio alongside R.
+
+To download and install Rstudio, follow the instructions [here](https://www.rstudio.com/products/rstudio/download/)
+
+**Reference**
+
+You may find this book chapter *Hands-On Programming with R* by Garett Grolemund useful to help you with the installation process [link](https://rstudio-education.github.io/hopr/starting.html).
+
+
+## R Introduction 
+
+*Here is a brief introduction to working with the R programming language.*
+
+**R as a super calculator**
+
+If you want to add two numbers you can use the command below:
 
 ```{r two-plus-two, exercise=TRUE}
+1 + 2
+```
+
+Test if you can subtract two numbers, say `5` from `8`:
+
+```{r subtract, exercise=TRUE}
 
 ```
 
-### Exercise with Code
+```{r subtract-solution}
+8-5
+```
 
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+What if we wanted to multiply `5` and `8`?
 
-Now write a function that adds any two numbers and then call it:
+```{r mult, exercise=TRUE}
 
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
+```
+
+```{r mult-solution}
+5*8
+```
+
+**Variable Assignment**
+
+We can assign values to a variable using the assignment operator `<-` or `=`. We can then work with the variables with assigned values.
+
+```{r assign, exercise=TRUE}
+x <- 12 # assign the value of 12 to the variable x
+y <- 5  # assign the value of 5 to the variable y
+
+product_xy <- x * y # product of x and y
+
+product_xy
+```
+
+*Note: anything that starts with a `#` sign is a comment and R will not execute it*
+
+**Installing Packages**
+
+R has extensive user-written packages. If the packages are available on the Comprehensive R Archive Network (CRAN), you can install them by using the command `install.packages("<package-name>")` in R console or `Tools>Install Packages` and search for the package in RStudio.
+
+See [here](https://rstudio-education.github.io/hopr/packages2.html) for details.
+
+**Help about a function**
+
+In the R Console you can type `help(<query>)` or `?<query>` to read its documentation. For example, if you want to know about the function `sum` you can type `help(sum)` of `?sum` and its documentation will show up.
+
+If you are unsure about the name of a function, you can type `apropos("<query>")` to display a list of the functions. For example, `apropos("sum")` shows the result from a fuzzy search with our query.
+
+**Writing your own function**
+
+You can write your own functions in R.
+
+Suppose we want to write a function that multiplies `x` and `y`. We can give the function a name, say `product`. 
+
+```{r func-product, exercise=TRUE}
+product <- function(x, y) {
+  # function to calculate the product of x and y
+  res <- x * y
+  print(paste(x, "multiplied by", y, "is", res))
 }
+
+product(5, 4)           # calling the function product
+
+product(x = 5, y = 4)   # use named arguments
+
 ```
 
-## Topic 2
+We multiplied `5` with `4`. 
 
-### Exercise with Hint
+You can change the numbers and re-run the code in the above chunk.
 
-*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
-
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
-```
-
-```{r print-limit-hint}
-head(mtcars)
-```
-
-### Quiz
-
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
-
-Some questions to verify that you understand the purposes of various base and recommended R packages:
-
-```{r quiz}
-quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
-  ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
-  )
-)
-```
