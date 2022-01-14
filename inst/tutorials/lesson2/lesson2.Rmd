@@ -271,6 +271,10 @@ grade_result(
 **Hint:** Each die has 6 faces. So, total number of outcomes (sample space) is $6^3=216$. The event that no two dice show the same face can happen in $6 \times 5 \times 4 = 120$ ways (first die can take any of the six faces, the second can take any of the remaining five faces, and the third can take any of the remaining 4). Required probability = $120/216=0.56$
 </div> 
 
+
+- Anderson 1.26, pp34
+
+
 ## Birthday problem
 
 This is a computationally challenging problem. Try to work out its logic!
@@ -301,13 +305,132 @@ grade_result(
 )
 ```
 
-
 <div id="birthday-hint">
 **Hint:** Any birthday is equally likely. So, there are a total of $365^{10}$ ways. Number of outcomes among them with no repeated birthdays is $P^{365}_{10}$. Probability of no shared birthday = $\frac{P^{365}_{10}}{365^{10}}$. 
 </div> 
 
 
+## Conditional Probability
+
+- A laptop manufacturer found that 75% of all customers want a high-speed processor, 80% want a fingerprint reader, and 65% want both. 
+
+```{r c8-setup, include=FALSE}
+# prob high speed processor
+pA <- 0.75
+# prob fingerprint reader
+pB <- 0.80
+# prob both
+pAB <- 0.65
+# prob A or B
+pAorB <- pA + pB - pAB; pAorB
+pAgB <- pAB/pB; pAgB
+pBgA <- pAB/pA; pBgA
+```
+
+a. What is the probability that a customer will want at least one of these features? (rounded up to 2 dp)
 
 
+```{r c8a, exercise=TRUE}
+
+```
+
+```{r c8a-check}
+grade_result(
+  pass_if(~identical(.result, 0.9))
+)
+```
+
+<div id="c8a-hint">
+**Hint:** $P(A)=$ prob that customer wants high-speed processor. $P(B)=$ customer wants fingerprint reader. By law of total probability, $A(A \text{ or } B) = P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+</div> 
 
 
+b. What is the probability that a customer who wants a high-speed processor also wants a fingerprint reader? (rounded up to 2 dp)
+
+```{r c8b, exercise=TRUE}
+
+```
+
+```{r c8b-check}
+grade_result(
+  pass_if(~identical(.result, 0.81))
+)
+```
+
+<div id="c8b-hint">
+**Hint:** From the law of conditional probability: $P(A|B) = \frac{P(A \cap B)}{P(B)}$.
+</div> 
+
+c. What is the probability that a customer who wants a fingerprint reader also wants a high-speed processor? (rounded up to 2 dp)
+
+```{r c8c, exercise=TRUE}
+
+```
+
+```{r c8c-check}
+grade_result(
+  pass_if(~identical(.result, 0.87))
+)
+```
+
+<div id="c8c-hint">
+**Hint:** From the law of conditional probability: $P(B|A) = \frac{P(A \cap B)}{P(A)}$.
+</div> 
+
+
+## Bayes Rule
+
+- Only one in 1,000 adults has a rare disease for which a screening test has been developed. The test is such that when an individual has the disease, a positive test will result 98% of the time, whereas for an individual without the disease, it will show a positive test result only 1% of the time (false positivity rate). If a randomly selected individual is tested and the result is positive, what is the probability that the individual has the disease? (rounded up to 3 dp)
+
+```{r bayes-setup, include=FALSE}
+pD <- 0.001 # pr. has the disease
+pnD <- 1-pD # pr. no disease
+
+pTgD <- 0.98  # test sensitivity 
+pTgnD <- 0.01 # false positive rate
+
+# pr. has the disease given tests positive
+pDgT <- (pTgD*pD)/(pTgD*pD + pTgnD*pnD); round(pDgT,3)
+```
+
+
+```{r bayes, exercise=TRUE}
+
+```
+
+```{r bayes-check}
+grade_result(
+  pass_if(~identical(.result, 0.089))
+)
+```
+
+<div id="bayes-hint">
+**Hint:** $D=$ event that has the disease, and $P(D) = 1/1000=0.001$, $P(D') = 1 - P(D) = 0.999$. $T=$ event that the person tests positive. Given, $P(T|D) = 0.98$ and $P(T|D')=0.01$. Now, use Bayes' rule to compute: $P(D|T) = \frac{P(T|D) \cdot P(D)}{P(T|D) \cdot P(D) + P(T|D') \cdot P(D')}$ 
+</div> 
+
+
+- A taxi was involved in a minor accident. The town has two taxi companies – Blue and Green. The green taxi company owns 85% of the cabs on the road. A witness says that she saw a blue taxi, but independent tests suggest that she makes a correct identification 80% of the time. What is the probability that a green taxi was in fact involved in the accident? (rounded up to 3 dp)
+
+```{r bayes1-setup, include=FALSE}
+pBlue <- 0.15
+pGreen <- 0.85
+# C = claim that the perpetrator is a Blue taxi
+pCgBlue <- 0.80    # correct id
+pCgGreen <- 0.20   # incorrect id (false positive)
+# prob that a green taxi was the perpetrator
+prob <- (pCgGreen*pGreen)/(pCgGreen*pGreen + pCgBlue*pBlue); round(prob, 3)
+```
+
+```{r bayes1, exercise=TRUE}
+
+```
+
+```{r bayes1-check}
+grade_result(
+  pass_if(~identical(.result, 0.586))
+)
+```
+
+<div id="bayes1-hint">
+**Hint:** $P(Blue)=0.15$ (prob of a blue taxi); $P(Green)=0.85$ (prob of a green taxi); $C=$ witness claim that the taxi is blue. Draw a prob. tree. Find $P(Green|C) = \frac{P(C|Green)\cdot P(Green)}{P(C|Green)\cdot P(Green) + P(C|Blue) \cdot P(Blue)}$.
+</div> 
