@@ -16,19 +16,19 @@ library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Introduction 
+## Introduction 
 
 *Here is a brief introduction to working with the R programming language.*
 
 **R as a super calculator**
 
-If you want to add two numbers you can use the command below:
+If you want to add two numbers you can run the command below:
 
 ```{r two-plus-two, exercise=TRUE}
 1 + 2
 ```
 
-Test if you can subtract two numbers, say `5` from `8`:
+Test if you can subtract two numbers in R, say `5` from `8`:
 
 ```{r subtract, exercise=TRUE}
 
