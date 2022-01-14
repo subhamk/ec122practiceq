@@ -15,6 +15,14 @@ Practice exercises are written using `learnr`. A standalone package is created `
 - Launch RStudio in binder and `Run the document` after navigating to the relevant folder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/subhamk/ec122practiceqbind/HEAD?urlpath=rstudio)
 - Each exercise runs as a shiny app. Get the direct link to share. For Lesson 1 exercise [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/subhamk/ec122practiceqbind/HEAD?urlpath=shiny/lesson1/)
 
+https://mybinder.org/v2/gh/subhamk/ec122practiceqbind/HEAD?urlpath=rstudio
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/subhamk/ec122practiceqbind/HEAD?urlpath=rstudio)
+
+
+https://mybinder.org/v2/gh/subhamk/ec122practiceqbind/HEAD
+
+
 
 **References for Tutorials**
 

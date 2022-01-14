@@ -29,7 +29,6 @@ Exercises include a mix of **multiple choice questions (MCQ)** and **R-based que
 > - R based exercises are intended to deepen your understanding of the material through practical application. 
 > - Exam/ test questions in 2021-22 will **not** ask you to write R codes.
 > - To retake any exercise, click on the `Start Over` link under TOC. 
-> - Your progress is not saved. User sessions automatically time-out after 10 minutes of inactivity.
 > - This is a beta version. If you spot any errors or have any feedback, please do share them with me.
 
 Let's begin!

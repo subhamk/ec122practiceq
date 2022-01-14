@@ -1,79 +1,313 @@
 ---
-title: "Probability and Probability Distributions"
+title: "Probability"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
 runtime: shiny_prerendered
 description: >
-  Learn concepts relating to probability and probability distributions.
+  Learn concepts relating to probability.
 ---
 
-```{r setup, include=FALSE}
-library(learnr)
+```{r setup, include=FALSE, message=FALSE}
+library("learnr")
+library("gradethis")
+# library("gtools")
+tutorial_options(exercise.checker = gradethis::grade_learnr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Basic Concepts
 
-## Topic 1
+- If you toss a fair coin, the probability that the outcome is a heads is:
 
-### Exercise 
-
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
-
-Write the R code required to add two plus two:
-
-```{r two-plus-two, exercise=TRUE}
+```{r p1, exercise=TRUE}
 
 ```
 
-### Exercise with Code
-
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
-
-Now write a function that adds any two numbers and then call it:
-
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
-```
-
-## Topic 2
-
-### Exercise with Hint
-
-*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
-
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
-```
-
-```{r print-limit-hint}
-head(mtcars)
-```
-
-### Quiz
-
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
-
-Some questions to verify that you understand the purposes of various base and recommended R packages:
-
-```{r quiz}
-quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
-  ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
-  )
+```{r p1-check}
+grade_result(
+  pass_if(~identical(.result, 0.5))
 )
 ```
+
+- If you roll a standard six-sided die, the probability that the outcome is odd is:
+
+```{r p2, exercise=TRUE}
+
+```
+
+```{r p2-check}
+grade_result(
+  pass_if(~identical(.result, 0.5))
+)
+```
+
+<div id="p2-hint">
+**Hint:** Event $A=$ Outcome is odd. $A=$ \{1,3,5\}. Required probability = $\frac{n(A)}{n(T)}$, where $n(.)$ denotes the number of elements in the set. 
+</div>
+
+
+- Suppose you roll a pair of six-sided dice. Assume that the dice can be distinguished from each other. What is the probability that the sum of the two dice is 8? (rounded up to 2 decimal points)
+
+```{r p2a, exercise=TRUE}
+
+```
+
+```{r p2a-check}
+grade_result(
+  pass_if(~identical(.result, round(5/36, 2))),
+  pass_if(~identical(.result, 5/36))
+)
+```
+
+<div id="p2-hint">
+**Hint:** There are a total of 36 possibilities, out of which the event that the sum of the two dice is 8 can arise in 5 ways - $\{(2,6), (3,5), (4,4), (5,3), (6,2)\}$. Required probability = 5/36. 
+</div>
+
+
+```{r p3-setup, include=FALSE}
+pA <- 0.3
+pB <- 0.6
+pAB <- 0.25
+pAorB <- pA + pB - pAB; pAorB
+notpAorB <- 1 - pAorB; notpAorB
+pAnotB <- pA - pAB; pAnotB
+```
+
+- Consider an online shopping portal. Let $A$ denote the event that a shopper has a PayPal account and $B$ the event that the shopper has a Natwest Bank account. Suppose that $P(A) = 0.3$, $P(B) = 0.6$, and $P(A \cap B) = 0.25$.
+
+a. Compute the probability that the individual has at least one of the two types of account.
+
+```{r p3a, exercise=TRUE}
+
+```
+
+```{r p3a-check}
+grade_result(
+  pass_if(~identical(.result, 0.65))
+)
+```
+
+<div id="p3a-hint">
+**Hint:** $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+</div>
+
+b. What is the probability that the shopper has neither type of card?
+    
+```{r p3b, exercise=TRUE}
+
+```
+
+```{r p3b-check}
+grade_result(
+  pass_if(~identical(.result, 0.35))
+)
+```
+
+<div id="p3b-hint">
+**Hint:** $P(A' \cap B') = P(A \cup B)' = 1 - P(A\cup B)$.
+</div>    
+
+
+c. What is the probability that the shopper has a Paypal account but not a Natwest Bank account?
+    
+```{r p3c, exercise=TRUE}
+
+```
+
+```{r p3c-check}
+grade_result(
+  pass_if(~identical(.result, 0.05))
+)
+```
+
+<div id="p3c-hint">
+**Hint:** $P(A \cap B') = P(A) - P(A \cap B)$.
+</div> 
+
+
+- Let $A$ denote the event that a job advertised requires knowledge of the R statistical software, and let $B$ be the event that the next job posted requires knowledge of Stata. Suppose that $P(A) = 0.5$ and $P(B) = 0.4$.
+
+```{r p4-setup, include=FALSE}
+pA <- 0.5
+pB <- 0.4
+pnotA <- 1-pA; pnotA
+pAorB <- pA + pB; pAorB
+1 - pAorB
+```
+
+
+a. Do the probabilities have to add to 1? Answer "Yes" or "No".
+
+```{r p4a, exercise=TRUE}
+
+```
+
+```{r p4a-check}
+grade_result(
+  pass_if(~identical(.result, "Yes")),
+  pass_if(~identical(.result, "yes")),
+)
+```
+
+<div id="p4a-hint">
+**Hint:** Jobs could require knowledge of other software e.g. Python.
+</div> 
+
+b. Calculate $P(A')$
+
+```{r p4b, exercise=TRUE}
+
+```
+
+```{r p4b-check}
+grade_result(
+  pass_if(~identical(.result, 0.5)),
+)
+```
+
+<div id="p4b-hint">
+**Hint:** $P(A') = 1 - P(A)$
+</div> 
+
+
+c. Calculate $P(A \cup B)$
+
+```{r p4c, exercise=TRUE}
+
+```
+
+```{r p4c-check}
+grade_result(
+  pass_if(~identical(.result, 0.9)),
+)
+```
+
+<div id="p4c-hint">
+**Hint:** Since $A$ and $B$ are mutually exclusive events, $P(A \cup B) = P(A) + P(B)$
+</div> 
+
+
+d. Calculate $P(A' \cap B')$
+
+```{r p4d, exercise=TRUE}
+
+```
+
+```{r p4d-check}
+grade_result(
+  pass_if(~identical(.result, 0.1)),
+)
+```
+
+<div id="p4d-hint">
+**Hint:** Draw Venn diagram. Note that $P(A' \cap B') = P(A \cup B)' = 1 - p(A \cup B)$. Holds even if they are not mutually exclusive -- deMorgan's Law.
+</div> 
+
+
+-----
+
+## Counting
+
+- Suppose that three letter are to be selected from A, B, C, D, E and F and arranged in order. How many permutations are possible?
+
+```{r c5, exercise=TRUE}
+
+```
+
+```{r c5-check}
+grade_result(
+  pass_if(~identical(.result, factorial(6)/factorial(6-3)))
+)
+```
+
+<div id="c5-hint">
+**Hint:** There are 6 letter A to F. Order is important. The first letter can be picked in 6 ways since any of the letters can be picked first. The second can be picked from the remaining 5 in 5 ways and similarly the third in 4 ways. Total number of ways = $6 \times 5 \times 4 = 120$ ways.
+</div> 
+
+- An urn contains 10 red, 6 green and 4 yellow balls. Suppose we draw two balls without replacement. What is the probability that the sample contains exactly one red or exactly one yellow ball? (final answer rounded up to 2 dp)
+
+```{r c6-setup, include=FALSE}
+# prob (red and green)
+p.RG <- (10*6)/choose(20,2); p.RG
+# prob green and yellow
+p.GY <- (6*4)/choose(20,2); p.GY
+# prob red and yellow
+p.RY <- (10*4)/choose(20,2); p.RY
+# prob exactly one red or exactly one yellow
+prob <- p.RG + p.GY + p.RY; round(prob,2)
+```
+
+
+```{r c6, exercise=TRUE}
+
+```
+
+
+```{r c6-check}
+grade_result(
+  pass_if(~identical(.result, 0.65))
+)
+```
+
+<div id="c6-hint">
+**Hint:** P(exactly one red or exactly one yellow) = P(red and green) + P(green and yellow) + P(red and yellow).  P(red and green) = $\frac{10 \cdot 6}{\binom{20}{2}}$. In a similar way, calculate the probability for the events P(green and yellow) and P(red and yellow). Add the three probabilities and round up the final result to 2dp.
+</div> 
+
+- What is the probability that in a roll of 3 dice no two show the same face? (rounded up to 2 dp)
+
+```{r c7, exercise=TRUE}
+
+```
+
+```{r c7-check}
+grade_result(
+  pass_if(~identical(.result, 120/216))
+)
+```
+
+<div id="c7-hint">
+**Hint:** Each die has 6 faces. So, total number of outcomes (sample space) is $6^3=216$. The event that no two dice show the same face can happen in $6 \times 5 \times 4 = 120$ ways (first die can take any of the six faces, the second can take any of the remaining five faces, and the third can take any of the remaining 4). Required probability = $120/216=0.56$
+</div> 
+
+## Birthday problem
+
+This is a computationally challenging problem. Try to work out its logic!
+
+```{r birthday-setup, include=FALSE}
+rm(list = ls())
+
+k <- 10
+p <- numeric(k)
+for (i in 1:k){
+  q <- 1 - (0:(i-1))/365
+  p[i] <- prod(q)
+}
+prob <- p[k]
+prob
+plot(1:k, p)
+```
+
+There are 10 people in a room. Assume each person's birthday is equally likely to be any of the 365 days of the year (we exclude leap years) and that birthday's are *independent*. What is the probability that there are no birthday matches (i.e. no two people in the room share the same birthday)?
+
+```{r birthday, exercise=TRUE}
+
+```
+
+```{r birthday-check}
+grade_result(
+  pass_if(~identical(.result, round((choose(365,10)*factorial(10))/365^10, 2)))
+)
+```
+
+
+<div id="birthday-hint">
+**Hint:** Any birthday is equally likely. So, there are a total of $365^{10}$ ways. Number of outcomes among them with no repeated birthdays is $P^{365}_{10}$. Probability of no shared birthday = $\frac{P^{365}_{10}}{365^{10}}$. 
+</div> 
+
+
+
+
+
+
