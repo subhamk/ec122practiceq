@@ -17,7 +17,7 @@ tutorial_options(exercise.checker = gradethis::grade_learnr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Basic Concepts
+## Probability: Basic Concepts
 
 - If you toss a fair coin, the probability that the outcome is a heads is:
 
@@ -206,8 +206,6 @@ grade_result(
 </div> 
 
 
------
-
 ## Counting
 
 - Suppose that three letter are to be selected from A, B, C, D, E and F and arranged in order. How many permutations are possible?
@@ -239,11 +237,9 @@ p.RY <- (10*4)/choose(20,2); p.RY
 prob <- p.RG + p.GY + p.RY; round(prob,2)
 ```
 
-
 ```{r c6, exercise=TRUE}
 
 ```
-
 
 ```{r c6-check}
 grade_result(
@@ -270,9 +266,6 @@ grade_result(
 <div id="c7-hint">
 **Hint:** Each die has 6 faces. So, total number of outcomes (sample space) is $6^3=216$. The event that no two dice show the same face can happen in $6 \times 5 \times 4 = 120$ ways (first die can take any of the six faces, the second can take any of the remaining five faces, and the third can take any of the remaining 4). Required probability = $120/216=0.56$
 </div> 
-
-
-- Anderson 1.26, pp34
 
 
 ## Birthday problem

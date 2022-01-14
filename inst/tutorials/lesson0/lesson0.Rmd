@@ -1,31 +1,18 @@
 ---
 title: "Introduction to R"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  A brief introduction to computing in R.
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
-
-
-## Downloading and Installing R/RStudio
-
-**R**
-
-You can download and install R from [here](https://cran.r-project.org/).
-
-**RStudio**
-
-RStudio is an application to work with R. It provides an interface to work with R. It is recommended that you install RStudio alongside R.
-
-To download and install Rstudio, follow the instructions [here](https://www.rstudio.com/products/rstudio/download/)
-
-**Reference**
-
-You may find this book chapter *Hands-On Programming with R* by Garett Grolemund useful to help you with the installation process [link](https://rstudio-education.github.io/hopr/starting.html).
-
 
 ## R Introduction 
 
@@ -108,4 +95,3 @@ product(x = 5, y = 4)   # use named arguments
 We multiplied `5` with `4`. 
 
 You can change the numbers and re-run the code in the above chunk.
-

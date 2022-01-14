@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 These practice questions are intended to check your understanding of the concepts covered in the pre-recorded lectures, live lectures, and the weekly tutorials. You should view these practice questions as complements.
 
-Exercises include a mix of **multiple choice questions (MCQ)** and **R-based questions**. The R-based questions will only cover select topics to keep the focus on *why* and to understand the assumptions and the steps involved.
+Exercises include a mix of **multiple choice questions (MCQ)** and **R-based questions**. The R-based questions will only cover select topics to keep the focus on understanding the assumptions and the steps involved.
 
 **Note:**
 
@@ -101,7 +101,7 @@ df %>% ggplot(aes(
 
 ```
 
-### Review question:
+### Review question
 
 ```{r simpson-q}
 question("Simpson's paradox arises when the results from individual sub-samples differ from the result that considers the overall (or merged) study.",
@@ -294,7 +294,7 @@ question("What is the missing frequency value identified by '**' in the table?",
          )
 ```
 
-### Frequency distribution in R
+### R: Frequency distribution
 
 *Here's a simple exercise to plot histograms in R*
 
@@ -720,7 +720,6 @@ question("What is the weighted average share price in the portfolio?",
 )
 ```
 
-
 Now, for a different portfolio, let's look at the stock returns:
 
 ```{r wt-avg-dat1}
@@ -759,7 +758,7 @@ question("What is the weighted average returns of the portfolio?",
 )
 ```
 
-## R exercise: Summarizing Quantitative Data
+## R: Summarizing Quantitative Data
 
 *Here we will learn how to generate summary statistics in R*
 
@@ -797,7 +796,7 @@ To get an overview of the distribution of `mpg`
 summary(mtcars$mpg)
 ```
 
-## R exercise: Summarizing Qualitative Data
+## R: Summarizing Qualitative Data
 
 *Here we will look at qualitative data*.
 
@@ -836,4 +835,3 @@ To plot a pie chart, we use the `pie` function.
 ```{r iris4, exercise = TRUE, exercise.setup="prepare-iris"}
 pie(species.freq)
 ```
-
