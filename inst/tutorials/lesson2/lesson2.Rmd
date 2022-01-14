@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: readable
+    highlight: pygments
 runtime: shiny_prerendered
 description: >
   Learn concepts relating to probability.

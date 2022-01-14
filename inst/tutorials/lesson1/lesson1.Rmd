@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: readable
+    highlight: pygments
 runtime: shiny_prerendered
 description: >
   Learn introductory concepts in statistical thinking, produce graphical summary of your data, and compute key summary statistics.
